@@ -1,0 +1,143 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.mc-sidebar {
+    width: 230px;
+    min-height: 100vh;
+    background: var(--mc-sidebar, #1a1f36);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: fixed;
+    top: 0; left: 0;
+    z-index: 1050;
+    transition: transform .25s ease;
+}
+
+.mc-main {
+    flex: 1;
+    margin-left: 230px;
+    min-height: 100vh;
+    background: var(--mc-bg, #f4f7fb);
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Sidebar brand ───────────────────────────────────────── */
+.mc-sidebar-brand {
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ── Navegación sidebar ──────────────────────────────────── */
+.mc-sidebar-nav {
+    flex: 1;
+    padding: .75rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+}
+
+.mc-nav-link {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .6rem 1.25rem;
+    color: var(--mc-sidebar-txt, #adb5d0);
+    text-decoration: none;
+    font-size: .875rem;
+    border-left: 3px solid transparent;
+    transition: all .15s;
+}
+
+.mc-nav-link:hover {
+    background: rgba(255,255,255,.06);
+    color: #fff;
+}
+
+.mc-nav-link.active {
+    background: rgba(13,110,253,.18);
+    color: #fff;
+    border-left-color: #0d6efd;
+}
+
+/* ── Footer sidebar ──────────────────────────────────────── */
+.mc-sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    color: #adb5d0;
+    font-size: .8rem;
+}
+
+/* ── Topbar ──────────────────────────────────────────────── */
+.mc-topbar {
+    background: #fff;
+    padding: .75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,.07);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.mc-topbar h6 { flex: 1; }
+
+/* ── Stat cards ──────────────────────────────────────────── */
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .25rem;
+}
+
+.stat-icon {
+    font-size: 1.4rem;
+    padding: .4rem;
+    border-radius: .5rem;
+    margin-bottom: .25rem;
+}
+
+.bg-primary-soft { background: #dbeafe; }
+.bg-warning-soft { background: #fef9c3; }
+.bg-success-soft { background: #dcfce7; }
+.bg-danger-soft  { background: #fee2e2; }
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: .75rem;
+    color: #6c757d;
+}
+
+/* ── Tabla ───────────────────────────────────────────────── */
+.table th { font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+
+/* ── Responsive: ocultar sidebar en móvil ────────────────── */
+@media (max-width: 767px) {
+    .mc-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .mc-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .mc-main {
+        margin-left: 0;
+    }
+}

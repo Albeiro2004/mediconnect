@@ -1,9 +1,3 @@
--- ============================================================
---  MediConnect – Script de Base de Datos
---  Motor: MariaDB / MySQL
---  Prefijo: reservas_enterprise
--- ============================================================
-
 CREATE DATABASE IF NOT EXISTS mediconnect
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
