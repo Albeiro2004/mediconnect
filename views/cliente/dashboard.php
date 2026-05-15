@@ -1,9 +1,18 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__ . '/../../config/paths.php';
+$w = mc_web_base();
+
 session_start();
 if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
-    header('Location: /mediconnect/views/auth/login.php');
+    header('Location: ' . $w . '/views/auth/login.php');
     exit;
 }
+
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -13,7 +22,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mis citas · MediConnect</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/mediconnect/assets/css/main.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/main.css">
 </head>
 
 <body>
@@ -27,7 +36,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
             <span class="text-muted small d-none d-sm-inline">
                 Hola, <strong><?= htmlspecialchars($_SESSION['user_nombre']) ?></strong>
             </span>
-            <a href="/mediconnect/views/cliente/agendar.php" class="btn btn-primary btn-sm btn-mc">
+            <a href="<?= htmlspecialchars($w) ?>/views/cliente/agendar.php" class="btn btn-primary btn-sm btn-mc">
                 + Nueva cita
             </a>
             <button class="btn btn-outline-secondary btn-sm" id="btn-logout">Salir</button>
@@ -67,7 +76,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
                 <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
             </svg>
             <p class="text-muted">No tienes citas en esta categoría.</p>
-            <a href="/mediconnect/views/cliente/agendar.php" class="btn btn-primary btn-mc btn-sm">Agendar cita</a>
+            <a href="<?= htmlspecialchars($w) ?>/views/cliente/agendar.php" class="btn btn-primary btn-mc btn-sm">Agendar cita</a>
         </div>
 
     </div>
@@ -90,7 +99,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/mediconnect/assets/js/dashboard-cliente.js"></script>
+    <script src="<?= htmlspecialchars($w) ?>/assets/js/dashboard-cliente.js"></script>
 </body>
 
 </html>

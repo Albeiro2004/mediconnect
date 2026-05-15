@@ -53,7 +53,7 @@ class MedicoController
             'email',
             'password',
             'sede_id',
-            'grupo_especialidad'
+            'cargo_especialidad'
         ]);
         if ($error) jsonResponse(422, ['error' => $error]);
 
@@ -76,7 +76,7 @@ class MedicoController
                 $email,
                 $data['password'],
                 (int)$data['sede_id'],
-                clean($data['grupo_especialidad']),
+                clean($data['cargo_especialidad']),
                 clean($data['perfil_profesional'] ?? '')
             );
             jsonResponse(201, ['message' => 'Médico registrado correctamente', 'id' => $id]);
@@ -94,13 +94,13 @@ class MedicoController
         if (!$medico) jsonResponse(404, ['error' => 'Médico no encontrado']);
 
         $data  = getJsonBody();
-        $error = validateRequired($data, ['sede_id', 'grupo_especialidad']);
+        $error = validateRequired($data, ['sede_id', 'cargo_especialidad']);
         if ($error) jsonResponse(422, ['error' => $error]);
 
         $this->model->update(
             $id,
             (int)$data['sede_id'],
-            clean($data['grupo_especialidad']),
+            clean($data['cargo_especialidad']),
             clean($data['perfil_profesional'] ?? '')
         )
             ? jsonResponse(200, ['message' => 'Médico actualizado correctamente'])

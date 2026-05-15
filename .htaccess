@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+
+    RewriteEngine On
+
+    # NO enviar views ni assets al router
+    RewriteRule ^views/ - [L]
+    RewriteRule ^assets/ - [L]
+
+    # Si existe archivo o carpeta física
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # API y rutas virtuales
+    RewriteRule ^ index.php [L]
+
+</IfModule>

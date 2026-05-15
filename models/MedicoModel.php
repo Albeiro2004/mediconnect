@@ -18,7 +18,7 @@ class MedicoModel
 
     public function getAll(?int $sedeId = null): array
     {
-        $sql = 'SELECT m.id, m.grupo_especialidad, m.perfil_profesional,
+        $sql = 'SELECT m.id, m.cargo_especialidad, m.perfil_profesional,
                        u.id AS usuario_id, u.nombre_completo, u.email,
                        s.id AS sede_id, s.nombre_sede, s.ciudad
                 FROM ' . self::TABLE . ' m
@@ -84,7 +84,7 @@ class MedicoModel
             $usuarioId = (int)$this->db->lastInsertId();
 
             $stmt = $this->db->prepare(
-                'INSERT INTO ' . self::TABLE . ' (usuario_id, sede_id, grupo_especialidad, perfil_profesional)
+                'INSERT INTO ' . self::TABLE . ' (usuario_id, sede_id, cargo_especialidad, perfil_profesional)
                  VALUES (?, ?, ?, ?)'
             );
             $stmt->execute([$usuarioId, $sedeId, $especialidad, $perfil ?: null]);
@@ -102,7 +102,7 @@ class MedicoModel
     {
         $stmt = $this->db->prepare(
             'UPDATE ' . self::TABLE . '
-             SET sede_id = ?, grupo_especialidad = ?, perfil_profesional = ?
+             SET sede_id = ?, cargo_especialidad = ?, perfil_profesional = ?
              WHERE id = ?'
         );
         return $stmt->execute([$sedeId, $especialidad, $perfil ?: null, $id]);
@@ -127,9 +127,10 @@ class MedicoModel
     public function getDisponiblesPorSede(int $sedeId): array
     {
         $stmt = $this->db->prepare(
-            'SELECT m.id, u.nombre_completo, m.grupo_especialidad, m.perfil_profesional
+            'SELECT m.id, u.nombre_completo, u.email, m.cargo_especialidad, m.perfil_profesional, s.nombre_sede
              FROM ' . self::TABLE . ' m
              JOIN ' . self::TBL_USERS . ' u ON m.usuario_id = u.id
+             JOIN ' . self::TBL_SEDES . ' s ON m.sede_id = s.id
              WHERE m.sede_id = ?
              ORDER BY u.nombre_completo ASC'
         );

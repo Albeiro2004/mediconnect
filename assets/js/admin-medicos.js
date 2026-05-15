@@ -1,4 +1,11 @@
-const API = '/mediconnect';
+const API = (() => {
+    const p = window.location.pathname;
+    const iv = p.indexOf('/views/');
+    if (iv > 0) return p.slice(0, iv);
+    const ia = p.indexOf('/assets/');
+    if (ia > 0) return p.slice(0, ia);
+    return '';
+})();
 let medicoEliminarId = null;
 const modalMedico   = new bootstrap.Modal(document.getElementById('modal-medico'));
 const modalEliminar = new bootstrap.Modal(document.getElementById('modal-eliminar'));
@@ -85,11 +92,11 @@ async function cargarMedicos(sedeId = '') {
                     <td class="text-muted">${m.id}</td>
                     <td class="fw-semibold">Dr(a). ${m.nombre_completo}</td>
                     <td>${m.email}</td>
-                    <td>${m.grupo_especialidad}</td>
+                    <td>${m.cargo_especialidad}</td>
                     <td>${m.nombre_sede}</td>
                     <td class="text-end">
                         <button class="btn btn-xs btn-outline-primary me-1"
-                                onclick="abrirEditar(${m.id}, ${m.sede_id}, '${m.grupo_especialidad}',
+                                onclick="abrirEditar(${m.id}, ${m.sede_id}, '${m.cargo_especialidad}',
                                 '${(m.perfil_profesional ?? '').replace(/'/g, "\\'")}')">
                             Editar
                         </button>
@@ -102,8 +109,9 @@ async function cargarMedicos(sedeId = '') {
             `);
         });
 
-    } catch {
-        toast('Error de conexión.', 'danger');
+    } catch(err) {
+        toast('Error de conexiónz.', 'danger');
+        console.error('💥 Error de fetch:', err);
     } finally {
         spinner(false);
     }
@@ -156,7 +164,7 @@ document.getElementById('btn-guardar-medico').addEventListener('click', async ()
         return;
     }
 
-    let body = { sede_id: parseInt(sedeId), grupo_especialidad: especialidad, perfil_profesional: perfil };
+    let body = { sede_id: parseInt(sedeId), cargo_especialidad: especialidad, perfil_profesional: perfil };
 
     if (!esEdicion) {
         const nombre   = document.getElementById('medico-nombre').value.trim();

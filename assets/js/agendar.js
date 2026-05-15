@@ -1,4 +1,11 @@
-const API = '/mediconnect';
+const API = (() => {
+    const p = window.location.pathname;
+    const iv = p.indexOf('/views/');
+    if (iv > 0) return p.slice(0, iv);
+    const ia = p.indexOf('/assets/');
+    if (ia > 0) return p.slice(0, ia);
+    return '';
+})();
 
 /* ── Estado del wizard ───────────────────────────────────── */
 const seleccion = {
@@ -157,7 +164,7 @@ async function cargarMedicos() {
                     <div class="card mc-card p-3 seleccionable" style="cursor:pointer"
                          data-id="${m.id}" data-nombre="${m.nombre_completo}">
                         <div class="fw-semibold">Dr(a). ${m.nombre_completo}</div>
-                        <div class="small text-muted">${m.grupo_especialidad}</div>
+                        <div class="small text-muted">${m.cargo_especialidad}</div>
                         ${m.perfil_profesional
                 ? `<div class="small text-muted mt-1">${m.perfil_profesional}</div>`
                 : ''}

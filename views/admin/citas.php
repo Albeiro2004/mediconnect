@@ -1,3 +1,8 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__ . '/../../config/paths.php';
+$w = mc_web_base();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,7 +12,7 @@
     <title>Gestión de Citas – MediConnect Admin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/mediconnect/assets/css/main.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/main.css">
 </head>
 
 <body>
@@ -122,6 +127,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        const API = (() => {
+            const p = window.location.pathname;
+            const iv = p.indexOf('/views/');
+            if (iv > 0) return p.slice(0, iv);
+            const ia = p.indexOf('/assets/');
+            if (ia > 0) return p.slice(0, ia);
+            return '';
+        })();
         const BADGE = {
             pendiente: '<span class="cita-badge badge-pendiente">Pendiente</span>',
             confirmada: '<span class="cita-badge badge-confirmada">Confirmada</span>',
@@ -170,7 +183,7 @@
 
         async function cargarCitas() {
             const estado = document.getElementById('filtroEstado').value;
-            const url = estado ? `/mediconnect/admin/citas?estado=${estado}` : '/mediconnect/admin/citas';
+            const url = estado ? `${API}/admin/citas?estado=${estado}` : `${API}/admin/citas`;
 
             try {
                 const res = await fetch(url, {
@@ -216,7 +229,7 @@
         async function guardarEstado() {
             const estado = document.getElementById('nuevoEstado').value;
 
-            const res = await fetch(`/mediconnect/citas/${citaActualId}/estado`, {
+            const res = await fetch(`${API}/citas/${citaActualId}/estado`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'

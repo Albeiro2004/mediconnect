@@ -1,7 +1,11 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__ . '/../../config/paths.php';
+$w = mc_web_base();
+
 session_start();
 if (empty($_SESSION['user_id']) || !in_array($_SESSION['user_rol'], ['superadmin', 'admin_sede'])) {
-    header('Location: /mediconnect/views/auth/login.php'); exit;
+    header('Location: ' . $w . '/views/auth/login.php'); exit;
 }
 ?>
 <!DOCTYPE html>
@@ -11,8 +15,8 @@ if (empty($_SESSION['user_id']) || !in_array($_SESSION['user_rol'], ['superadmin
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Médicos · MediConnect</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/mediconnect/assets/css/main.css">
-    <link rel="stylesheet" href="/mediconnect/assets/css/admin.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/main.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/admin.css">
 </head>
 <body>
 
@@ -23,11 +27,11 @@ if (empty($_SESSION['user_id']) || !in_array($_SESSION['user_rol'], ['superadmin
         <button class="btn btn-sm text-white d-md-none" id="btn-close-sidebar">✕</button>
     </div>
     <nav class="mc-sidebar-nav">
-        <a href="/mediconnect/views/admin/dashboard.php" class="mc-nav-link">📊 <span>Dashboard</span></a>
-        <a href="/mediconnect/views/admin/sedes.php"     class="mc-nav-link">🏥 <span>Sedes</span></a>
-        <a href="/mediconnect/views/admin/medicos.php"   class="mc-nav-link active">👨‍⚕️ <span>Médicos</span></a>
-        <a href="/mediconnect/views/admin/servicios.php" class="mc-nav-link">🩺 <span>Servicios</span></a>
-        <a href="/mediconnect/views/admin/citas.php"     class="mc-nav-link">📋 <span>Citas</span></a>
+        <a href="<?= htmlspecialchars($w) ?>/views/admin/dashboard.php" class="mc-nav-link">📊 <span>Dashboard</span></a>
+        <a href="<?= htmlspecialchars($w) ?>/views/admin/sedes.php"     class="mc-nav-link">🏥 <span>Sedes</span></a>
+        <a href="<?= htmlspecialchars($w) ?>/views/admin/medicos.php"   class="mc-nav-link active">👨‍⚕️ <span>Médicos</span></a>
+        <a href="<?= htmlspecialchars($w) ?>/views/admin/servicios.php" class="mc-nav-link">🩺 <span>Servicios</span></a>
+        <a href="<?= htmlspecialchars($w) ?>/views/admin/citas.php"     class="mc-nav-link">📋 <span>Citas</span></a>
     </nav>
     <div class="mc-sidebar-footer">
         <span class="small text-truncate"><?= htmlspecialchars($_SESSION['user_nombre']) ?></span>
@@ -148,6 +152,6 @@ if (empty($_SESSION['user_id']) || !in_array($_SESSION['user_rol'], ['superadmin
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/mediconnect/assets/js/admin-medicos.js"></script>
+<script src="<?= htmlspecialchars($w) ?>/assets/js/admin-medicos.js"></script>
 </body>
 </html>

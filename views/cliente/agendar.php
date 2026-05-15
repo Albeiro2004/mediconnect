@@ -1,9 +1,18 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__ . '/../../config/paths.php';
+$w = mc_web_base();
+
 session_start();
 if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
-    header('Location: /mediconnect/views/auth/login.php');
+    header('Location: ' . $w . '/views/auth/login.php');
     exit;
 }
+
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -13,14 +22,14 @@ if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Agendar cita · MediConnect</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/mediconnect/assets/css/main.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/main.css">
 </head>
 
 <body>
 
     <!-- Navbar -->
     <nav class="navbar mc-navbar px-3 mb-4">
-        <a class="navbar-brand" href="/mediconnect/views/cliente/dashboard.php">
+        <a class="navbar-brand" href="<?= htmlspecialchars($w) ?>/views/cliente/dashboard.php">
             <strong>Medi</strong>Connect
         </a>
         <span class="text-muted small">Agendar nueva cita</span>
@@ -34,7 +43,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
 
     <div class="container pb-5" style="max-width:720px">
 
-        <a href="/mediconnect/views/cliente/dashboard.php"
+        <a href="<?= htmlspecialchars($w) ?>/views/cliente/dashboard.php"
             class="btn btn-sm btn-outline-secondary mb-4">← Volver</a>
 
         <!-- Indicador de pasos -->
@@ -141,7 +150,7 @@ if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
                 </svg>
                 <h5 class="fw-bold text-success">¡Cita agendada!</h5>
                 <p class="text-muted small">Recibirás una confirmación en tu correo.</p>
-                <a href="/mediconnect/views/cliente/dashboard.php"
+                <a href="<?= htmlspecialchars($w) ?>/views/cliente/dashboard.php"
                     class="btn btn-primary btn-mc btn-sm mt-2">Ver mis citas</a>
             </div>
 
@@ -149,7 +158,14 @@ if (empty($_SESSION['user_id']) || $_SESSION['user_rol'] !== 'cliente') {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/mediconnect/assets/js/agendar.js"></script>
+    <script src="<?= htmlspecialchars($w) ?>/assets/js/agendar.js"></script>
+    <script>
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+    </script>
 </body>
 
 </html>

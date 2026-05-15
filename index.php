@@ -2,6 +2,40 @@
 
 declare(strict_types=1);
 
+$method = $_SERVER['REQUEST_METHOD'];
+$uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$base = '/mediconnect';
+
+require_once __DIR__ . '/config/paths.php';
+
+$w = mc_web_base();
+
+if (str_starts_with($uri, $base)) {
+    $uri = substr($uri, strlen($base));
+}
+
+$uri = str_replace('/index.php', '', $uri);
+
+$uri = rtrim($uri, '/') ?: '/';
+
+// Raíz del proyecto: panel según sesión o login (HTML, no API JSON)
+if ($method === 'GET' && $uri === '/') {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!empty($_SESSION['user_id'])) {
+        $dest = match ($_SESSION['user_rol'] ?? '') {
+            'superadmin', 'admin_sede' => '/mediconnect/views/admin/dashboard.php',
+            'prestador'                => '/mediconnect/views/prestador/dashboard.php',
+            default                    => '/mediconnect/views/cliente/dashboard.php',
+        };
+        header('Location: ' . $dest);
+    } else {
+        header('Location: ' . $w . '/views/auth/login.php');
+    }
+    exit;
+}
+
 // ── Cabeceras CORS / JSON ─────────────────────────────────────
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: http://mediconnect.test');
@@ -40,10 +74,6 @@ function spm_autoload(): void
 }
 
 // ── Router simple ─────────────────────────────────────────────
-$method = $_SERVER['REQUEST_METHOD'];
-$uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri    = rtrim(str_replace('/mediconnect', '', $uri), '/') ?: '/';
-
 // Extraer segmentos
 $segments = explode('/', ltrim($uri, '/'));  // ['auth','login']
 

@@ -1,4 +1,11 @@
-const API = '/mediconnect';
+const API = (() => {
+    const p = window.location.pathname;
+    const iv = p.indexOf('/views/');
+    if (iv > 0) return p.slice(0, iv);
+    const ia = p.indexOf('/assets/');
+    if (ia > 0) return p.slice(0, ia);
+    return '';
+})();
 let todasLasCitas = [];
 let citaAcancelarId = null;
 const modalCancelar = new bootstrap.Modal(document.getElementById('modal-cancelar'));

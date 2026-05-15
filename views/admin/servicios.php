@@ -1,3 +1,8 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__ . '/../../config/paths.php';
+$w = mc_web_base();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,7 +12,7 @@
     <title>Servicios – MediConnect Admin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="/mediconnect/assets/css/main.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/main.css">
 </head>
 
 <body>
@@ -105,6 +110,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        const API = (() => {
+            const p = window.location.pathname;
+            const iv = p.indexOf('/views/');
+            if (iv > 0) return p.slice(0, iv);
+            const ia = p.indexOf('/assets/');
+            if (ia > 0) return p.slice(0, ia);
+            return '';
+        })();
         let todosServicios = [];
         let modoEditar = false;
         let editarId = null;
@@ -116,7 +129,7 @@
         const modal = new bootstrap.Modal(document.getElementById('modalServicio'));
 
         async function cargar() {
-            const res = await fetch('/mediconnect/servicios', {
+            const res = await fetch(`${API}/servicios`, {
                 credentials: 'same-origin'
             });
             const data = await res.json();
@@ -208,7 +221,7 @@
 
             try {
                 const res = modoEditar ?
-                    await fetch(`/mediconnect/admin/servicios/${editarId}`, {
+                    await fetch(`${API}/admin/servicios/${editarId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -216,7 +229,7 @@
                         credentials: 'same-origin',
                         body: JSON.stringify(body)
                     }) :
-                    await fetch('/mediconnect/admin/servicios', {
+                    await fetch(`${API}/admin/servicios`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -239,7 +252,7 @@
 
         async function eliminar(id, nombre) {
             if (!confirm(`¿Eliminar el servicio "${nombre}"?`)) return;
-            const res = await fetch(`/mediconnect/admin/servicios/${id}`, {
+            const res = await fetch(`${API}/admin/servicios/${id}`, {
                 method: 'DELETE',
                 credentials: 'same-origin'
             });

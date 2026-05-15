@@ -123,6 +123,6 @@ INSERT INTO usuarios (nombre_completo, email, password, rol)
 VALUES (
     'Super Administrador',
     'admin@mediconnect.test',
-    '$2y$12$placeholder_hash_change_this',
+    '$2y$12$R0vceSIomMDgvURsWC5b4uiJy.dGm.s8l3XPyJP8X/uu2d2BUzn7e',
     'superadmin'
 );

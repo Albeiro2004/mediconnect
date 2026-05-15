@@ -1,13 +1,17 @@
 <?php
+declare(strict_types=1);
+require_once __DIR__ . '/../../config/paths.php';
+$w = mc_web_base();
+
 session_start();
 // Si ya está autenticado, redirigir según rol
 if (!empty($_SESSION['user_id'])) {
     $redir = match ($_SESSION['user_rol']) {
-        'superadmin', 'admin_sede' => '/mediconnect/views/admin/dashboard.php',
-        'prestador'                => '/mediconnect/views/prestador/dashboard.php',
-        default                    => '/mediconnect/views/cliente/dashboard.php',
+        'superadmin', 'admin_sede' => $w . '/views/admin/dashboard.php',
+        'prestador'                => $w . '/views/prestador/dashboard.php',
+        default                    => $w . '/views/cliente/dashboard.php',
     };
-    header("Location: $redir");
+    header('Location: ' . $redir);
     exit;
 }
 ?>
@@ -19,7 +23,7 @@ if (!empty($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Iniciar sesión · MediConnect</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/mediconnect/assets/css/main.css">
+    <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/main.css">
 </head>
 
 <body>
@@ -77,14 +81,14 @@ if (!empty($_SESSION['user_id'])) {
             <hr class="my-3">
             <p class="text-center small mb-0">
                 ¿No tienes cuenta?
-                <a href="/mediconnect/views/auth/registro.php" class="fw-semibold">Regístrate</a>
+                <a href="<?= htmlspecialchars($w) ?>/views/auth/registro.php" class="fw-semibold">Regístrate</a>
             </p>
 
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/mediconnect/assets/js/auth.js"></script>
+    <script src="<?= htmlspecialchars($w) ?>/assets/js/auth.js"></script>
 </body>
 
 </html>

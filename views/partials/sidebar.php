@@ -1,5 +1,9 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+declare(strict_types=1);
+require_once __DIR__ . '/../../config/paths.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $rol    = $_SESSION['user_rol']    ?? null;
 $nombre = $_SESSION['user_nombre'] ?? 'Usuario';
@@ -404,7 +408,7 @@ $actual = basename($_SERVER['PHP_SELF']);
         </nav>
 
         <div class="sidebar-footer">
-            <a href="/mediconnect/views/auth/logout.php">
+            <a href="<?= htmlspecialchars(mc_web_base()) ?>/views/auth/logout.php">
                 <i class="bi bi-box-arrow-left"></i> Cerrar sesión
             </a>
         </div>
