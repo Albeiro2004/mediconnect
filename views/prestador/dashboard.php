@@ -38,6 +38,9 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
         <a href="<?= htmlspecialchars($w) ?>/views/prestador/disponibilidad.php"  class="mc-nav-link">
             🗓 <span>Disponibilidad</span>
         </a>
+        <a href="<?= htmlspecialchars($w) ?>/views/prestador/logs.php"           class="mc-nav-link">
+            📝 <span>Logs de atención</span>
+        </a>
     </nav>
     <div class="mc-sidebar-footer">
         <span class="small text-truncate"><?= htmlspecialchars($_SESSION['user_nombre']) ?></span>
@@ -62,7 +65,7 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
         <!-- Filtro por fecha -->
         <div class="d-flex align-items-center gap-2 mb-3">
             <label class="small fw-semibold mb-0">Fecha:</label>
-            <input type="date" id="filtro-fecha" class="form-control form-control-sm" style="max-width:180px">
+            <label for="filtro-fecha"></label><input type="date" id="filtro-fecha" class="form-control form-control-sm" style="max-width:180px">
             <button class="btn btn-sm btn-outline-secondary" id="btn-limpiar-fecha">Ver todas</button>
         </div>
 
@@ -134,7 +137,7 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
             </div>
             <div class="modal-body">
                 <p class="small text-muted mb-3" id="modal-estado-info"></p>
-                <select class="form-select" id="select-estado">
+                <label for="select-estado"></label><select class="form-select" id="select-estado">
                     <option value="confirmada">Confirmada</option>
                     <option value="finalizada">Finalizada</option>
                     <option value="cancelada">Cancelada</option>

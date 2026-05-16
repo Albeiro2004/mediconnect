@@ -162,13 +162,14 @@ document.getElementById('btn-guardar-estado').addEventListener('click', async ()
         });
         const data = await res.json();
 
-        modalEstado.hide();
-
-        res.ok
-            ? toast('Estado actualizado.')
-            : toast(data.error ?? 'Error al actualizar.', 'danger');
-
-        await cargarCitas(document.getElementById('filtro-fecha').value);
+        if (!res.ok) {
+            toast(data.error ?? 'Error al actualizar.', 'danger');
+            modalEstado.hide();
+        } else {
+            modalEstado.hide();
+            toast('Estado actualizado.');
+            await cargarCitas(document.getElementById('filtro-fecha').value);
+        }
 
     } catch {
         toast('Error de conexión.', 'danger');

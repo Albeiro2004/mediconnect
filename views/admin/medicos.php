@@ -115,7 +115,24 @@ if (empty($_SESSION['user_id']) || !in_array($_SESSION['user_rol'], ['superadmin
                 </div>
                 <div class="mb-3">
                     <label class="form-label small fw-semibold">Especialidad</label>
-                    <input type="text" class="form-control" id="medico-especialidad" placeholder="Ej: Medicina General">
+                    <select class="form-select" id="medico-especialidad">
+                        <option value="">Selecciona una especialidad</option>
+                        <option value="Medicina General">Medicina General</option>
+                        <option value="Pediatría">Pediatría</option>
+                        <option value="Ginecología y Obstetricia">Ginecología y Obstetricia</option>
+                        <option value="Cardiología">Cardiología</option>
+                        <option value="Dermatología">Dermatología</option>
+                        <option value="Ortopedia y Traumatología">Ortopedia y Traumatología</option>
+                        <option value="Neurología">Neurología</option>
+                        <option value="Psiquiatría">Psiquiatría</option>
+                        <option value="Oftalmología">Oftalmología</option>
+                        <option value="Otorrinolaringología">Otorrinolaringología</option>
+                        <option value="Urología">Urología</option>
+                        <option value="Endocrinología">Endocrinología</option>
+                        <option value="Gastroenterología">Gastroenterología</option>
+                        <option value="Neumología">Neumología</option>
+                        <option value="Odontología">Odontología</option>
+                    </select>
                 </div>
                 <div class="mb-1">
                     <label class="form-label small fw-semibold">Perfil profesional <span class="text-muted">(opcional)</span></label>

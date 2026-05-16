@@ -38,6 +38,9 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
         <a href="<?= htmlspecialchars($w) ?>/views/prestador/disponibilidad.php" class="mc-nav-link active">
             🗓 <span>Disponibilidad</span>
         </a>
+        <a href="<?= htmlspecialchars($w) ?>/views/prestador/logs.php"           class="mc-nav-link">
+            📝 <span>Logs de atención</span>
+        </a>
     </nav>
     <div class="mc-sidebar-footer">
         <span class="small text-truncate"><?= htmlspecialchars($_SESSION['user_nombre']) ?></span>
