@@ -64,7 +64,7 @@ class CitaModel
             $params[] = $fecha;
         }
 
-        $sql .= ' ORDER BY c.fecha_cita ASC, c.hora_cita ASC';
+        $sql .= ' ORDER BY c.fecha_cita DESC, c.hora_cita DESC';
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);

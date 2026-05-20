@@ -19,114 +19,490 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Logs de atención · MediConnect</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/main.css">
     <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/admin.css">
+
+    <style>
+        :root {
+            --teal:       #0a9396;
+            --teal-dark:  #005f73;
+            --teal-light: #94d2bd;
+            --sidebar-width: 260px;
+        }
+
+        /* ===== GLOBAL TYPOGRAPHY ===== */
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            color: #212529;
+            line-height: 1.5;
+        }
+
+        h1, h2, h3, h4, h5, h6,
+        .btn, .form-control, .form-select,
+        .table, .badge, .nav-link, .modal-title,
+        .form-label, .alert, textarea.form-control {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .mc-sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--teal-dark), var(--teal));
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            z-index: 1040;
+            transition: transform 0.3s ease;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .mc-sidebar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem 1.25rem;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 1rem;
+        }
+
+        .mc-sidebar-brand .fw-bold {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.4rem;
+        }
+
+        .mc-sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            padding: 0 0.25rem;
+        }
+
+        .mc-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            border-radius: 0.6rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .mc-nav-link:hover,
+        .mc-nav-link.active {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            transform: translateX(4px);
+        }
+
+        .mc-nav-link i {
+            font-size: 1.1rem;
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        .mc-sidebar-footer {
+            padding: 1rem 0.75rem;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mc-sidebar-footer .small {
+            color: rgba(255,255,255,0.9);
+            font-weight: 500;
+        }
+
+        /* ===== MAIN & TOPBAR ===== */
+        .mc-main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .mc-topbar {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            border-bottom: 1px solid #e9ecef;
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 1030;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+
+        .mc-topbar h6 {
+            font-weight: 600;
+            color: var(--teal-dark);
+            font-size: 1.25rem;
+            flex: 1;
+        }
+
+        /* ===== CARDS ===== */
+        .mc-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            background: #fff;
+        }
+
+        .mc-card h6.fw-bold {
+            font-size: 1.1rem;
+            color: var(--teal-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .mc-card h6.fw-bold i { color: var(--teal); }
+
+        /* ===== PENDING LIST ITEMS ===== */
+        #lista-pendientes .d-flex {
+            padding: 0.85rem 1rem;
+            border-radius: 0.6rem;
+            transition: background 0.2s ease;
+            margin-bottom: 0.5rem;
+        }
+        #lista-pendientes .d-flex:hover {
+            background: rgba(10,147,150,0.05);
+        }
+        #lista-pendientes .fw-semibold.small {
+            font-size: 0.9rem;
+            color: var(--teal-dark);
+            font-weight: 600;
+        }
+        #lista-pendientes .text-muted.small {
+            font-size: 0.82rem;
+        }
+
+        /* ===== TABLE ===== */
+        .table thead th {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #6c757d;
+            border-bottom: 2px solid #f0f0f0;
+            padding: 0.85rem 1rem;
+            font-weight: 600;
+            background: #fafafa;
+        }
+
+        .table tbody td {
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            vertical-align: middle;
+            border-color: #f0f0f0;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(10,147,150,0.03);
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .btn-action {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .btn-action.edit {
+            background: rgba(13,110,253,0.1);
+            color: #0d6efd;
+            border-color: rgba(13,110,253,0.2);
+        }
+        .btn-action.edit:hover {
+            background: #0d6efd;
+            color: #fff;
+        }
+
+        /* ===== PRIMARY BUTTON ===== */
+        .btn-mc {
+            background: var(--teal);
+            border-color: var(--teal);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .btn-mc:hover {
+            background: var(--teal-dark);
+            border-color: var(--teal-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(10,147,150,0.3);
+        }
+
+        /* ===== FORM INPUTS ===== */
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.4rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.6rem;
+            border: 1px solid #ced4da;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 0.2rem rgba(10,147,150,0.15);
+        }
+        .form-control::placeholder, textarea.form-control::placeholder {
+            color: #adb5bd;
+            font-style: italic;
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.5;
+        }
+        input[type="date"].form-control {
+            cursor: pointer;
+        }
+
+        /* ===== ALERT ===== */
+        .alert {
+            border-radius: 0.6rem;
+            border: 1px solid transparent;
+            font-weight: 500;
+        }
+        .alert-danger {
+            background: rgba(220,53,69,0.1);
+            color: #58151c;
+            border-color: rgba(220,53,69,0.3);
+        }
+
+        /* ===== MODAL ===== */
+        .modal-content {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        .modal-header {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 1.25rem 1.5rem;
+        }
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--teal-dark);
+        }
+        .modal-body { padding: 1.25rem 1.5rem; }
+        .modal-footer {
+            border-top: 1px solid #f0f0f0;
+            padding: 1rem 1.5rem;
+            gap: 0.5rem;
+        }
+
+        /* ===== TOAST & SPINNER ===== */
+        #toast-box {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 300px;
+        }
+
+        #spinner-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+        }
+        #spinner-overlay.show { display: flex; }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-width: 0.25em;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .mc-sidebar { transform: translateX(-100%); }
+            .mc-sidebar.show { transform: translateX(0); }
+            .mc-main { margin-left: 0; }
+            .mc-main.sidebar-open { margin-left: var(--sidebar-width); }
+            .mc-topbar { padding: 0.75rem 1rem; }
+            .btn-mc { padding: 0.35rem 0.75rem; font-size: 0.85rem; }
+            #lista-pendientes .d-flex { flex-direction: column; gap: 0.5rem; align-items: flex-start !important; }
+            #lista-pendientes .d-flex .btn { width: 100%; justify-content: center; }
+            .table-responsive { font-size: 0.85rem; }
+        }
+    </style>
 </head>
 <body>
 
 <!-- Sidebar -->
-<div class="mc-sidebar" id="sidebar">
+<aside class="mc-sidebar" id="sidebar" aria-label="Menú principal">
     <div class="mc-sidebar-brand">
-        <span class="text-white fw-bold fs-5"><span class="text-info">Medi</span>Connect</span>
-        <button class="btn btn-sm text-white d-md-none" id="btn-close-sidebar">✕</button>
+        <span class="fw-bold"><span class="text-info">Medi</span>Connect</span>
+        <button class="btn btn-sm text-white d-md-none" id="btn-close-sidebar" aria-label="Cerrar menú">
+            <i class="bi bi-x-lg"></i>
+        </button>
     </div>
     <nav class="mc-sidebar-nav">
-        <a href="<?= htmlspecialchars($w) ?>/views/prestador/dashboard.php"      class="mc-nav-link">
-            📊 <span>Mi agenda</span>
+        <a href="<?= htmlspecialchars($w) ?>/views/prestador/dashboard.php" class="mc-nav-link">
+            <i class="bi bi-speedometer2"></i> <span>Mi agenda</span>
         </a>
         <a href="<?= htmlspecialchars($w) ?>/views/prestador/disponibilidad.php" class="mc-nav-link">
-            🗓 <span>Disponibilidad</span>
+            <i class="bi bi-calendar-week"></i> <span>Disponibilidad</span>
         </a>
-        <a href="<?= htmlspecialchars($w) ?>/views/prestador/logs.php"           class="mc-nav-link active">
-            📝 <span>Logs de atención</span>
+        <a href="<?= htmlspecialchars($w) ?>/views/prestador/logs.php" class="mc-nav-link active">
+            <i class="bi bi-journal-text"></i> <span>Logs de atención</span>
         </a>
     </nav>
     <div class="mc-sidebar-footer">
         <span class="small text-truncate"><?= htmlspecialchars($_SESSION['user_nombre']) ?></span>
-        <button class="btn btn-sm btn-outline-light ms-2" id="btn-logout">Salir</button>
+        <button class="btn btn-sm btn-outline-light ms-2 d-flex align-items-center gap-1" id="btn-logout">
+            <i class="bi bi-box-arrow-right"></i> Salir
+        </button>
     </div>
-</div>
+</aside>
 
-<!-- Main -->
-<div class="mc-main" id="main-content">
+<!-- Main Content -->
+<main class="mc-main" id="main-content">
 
-    <div class="mc-topbar">
-        <button class="btn btn-sm btn-outline-secondary d-md-none" id="btn-open-sidebar">☰</button>
-        <h6 class="mb-0 fw-bold">Logs de atención</h6>
+    <!-- Topbar -->
+    <header class="mc-topbar">
+        <button class="btn btn-sm btn-outline-secondary d-md-none" id="btn-open-sidebar" aria-label="Abrir menú">
+            <i class="bi bi-list"></i>
+        </button>
+        <h6 class="mb-0">Logs de atención</h6>
+    </header>
+
+    <!-- Toast & Spinner -->
+    <div id="toast-box" role="region" aria-live="polite"></div>
+    <div id="spinner-overlay" aria-busy="true">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
     </div>
 
-    <div id="toast-box"></div>
-    <div id="spinner-overlay"><div class="spinner-border text-primary"></div></div>
-
+    <!-- Content -->
     <div class="p-4">
 
-        <!-- Citas finalizadas sin log -->
+        <!-- Pending Appointments (No Log Yet) -->
         <div class="card mc-card p-3 mb-4">
-            <h6 class="fw-bold mb-3">⏳ Citas finalizadas pendientes de log</h6>
+            <h6 class="fw-bold mb-3">
+                <i class="bi bi-hourglass-split"></i> Citas finalizadas pendientes de log
+            </h6>
             <div id="lista-pendientes">
-                <p class="text-muted small">Cargando...</p>
+                <p class="text-muted small mb-0">
+                    <i class="bi bi-hourglass-split me-1"></i> Cargando...
+                </p>
             </div>
         </div>
 
-        <!-- Logs registrados -->
+        <!-- Registered Logs Table -->
         <div class="card mc-card p-3">
-            <h6 class="fw-bold mb-3">📋 Logs registrados</h6>
+            <h6 class="fw-bold mb-3">
+                <i class="bi bi-clipboard-check"></i> Logs registrados
+            </h6>
             <div class="table-responsive">
-                <table class="table table-hover align-middle small mb-0">
+                <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                     <tr>
-                        <th>#</th>
-                        <th>Cliente</th>
-                        <th>Servicio</th>
-                        <th>Fecha cita</th>
-                        <th>Próxima cita</th>
-                        <th></th>
+                        <th scope="col">#</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Servicio</th>
+                        <th scope="col">Fecha cita</th>
+                        <th scope="col">Próxima cita</th>
+                        <th scope="col" class="text-end">Acciones</th>
                     </tr>
                     </thead>
                     <tbody id="tabla-logs">
-                    <tr><td colspan="6" class="text-center text-muted py-4">Cargando...</td></tr>
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <div class="d-flex flex-column align-items-center gap-2">
+                                <i class="bi bi-hourglass-split fs-4"></i>
+                                <span>Cargando logs...</span>
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
     </div>
-</div>
+</main>
 
-<!-- Modal crear / editar log -->
-<div class="modal fade" id="modal-log" tabindex="-1">
+<!-- Modal: Create / Edit Log -->
+<div class="modal fade" id="modal-log" tabindex="-1" aria-labelledby="modal-log-titulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-header border-0">
-                <h6 class="modal-title fw-bold" id="modal-log-titulo">Registrar log de atención</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title" id="modal-log-titulo">Registrar log de atención</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
+                <!-- Alert: estructura simple para compatibilidad con .textContent del JS -->
                 <div id="modal-alert" class="alert alert-danger py-2 small d-none"></div>
+
                 <input type="hidden" id="log-id">
                 <input type="hidden" id="log-cita-id">
 
+                <!-- Info: estructura simple para compatibilidad con .textContent del JS -->
                 <p class="small text-muted mb-3" id="log-cita-info"></p>
 
                 <div class="mb-3">
-                    <label class="form-label small fw-semibold">Observaciones finales</label>
+                    <label for="log-observaciones" class="form-label small">Observaciones finales</label>
                     <textarea class="form-control" id="log-observaciones" rows="3"
                               placeholder="Describe el estado del paciente y hallazgos relevantes"></textarea>
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label small fw-semibold">Tratamiento o resultado</label>
+                    <label for="log-tratamiento" class="form-label small">Tratamiento o resultado</label>
                     <textarea class="form-control" id="log-tratamiento" rows="3"
                               placeholder="Describe el tratamiento indicado o el resultado de la consulta"></textarea>
                 </div>
+
                 <div class="mb-1">
-                    <label class="form-label small fw-semibold">Próxima cita sugerida <span class="text-muted">(opcional)</span></label>
+                    <label for="log-proxima" class="form-label small">Próxima cita sugerida <span class="text-muted">(opcional)</span></label>
                     <input type="date" class="form-control" id="log-proxima" style="max-width:200px">
                 </div>
             </div>
-            <div class="modal-footer border-0">
-                <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary btn-sm btn-mc" id="btn-guardar-log">
+            <div class="modal-footer border-0 pt-0">
+                <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i> Cancelar
+                </button>
+                <button class="btn btn-sm btn-mc text-white" id="btn-guardar-log">
                     <span id="btn-log-txt">Guardar</span>
                     <span class="spinner-border spinner-border-sm ms-1 d-none" id="btn-log-spin"></span>
                 </button>
@@ -135,6 +511,7 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
     </div>
 </div>
 
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= htmlspecialchars($w) ?>/assets/js/prestador-logs.js"></script>
 </body>

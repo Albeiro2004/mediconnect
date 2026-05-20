@@ -33,7 +33,7 @@ function spinner(show) {
 
 /* ── Badge de estado ─────────────────────────────────────── */
 function badgeEstado(estado) {
-    return `<span class="badge badge-${estado}">${estado.charAt(0).toUpperCase() + estado.slice(1)}</span>`;
+    return `<span class="cita-badge badge-${estado}">${estado.charAt(0).toUpperCase() + estado.slice(1)}</span>`;
 }
 
 /* ── Renderizar lista de citas ───────────────────────────── */
@@ -59,7 +59,7 @@ function renderCitas(citas) {
         const puedeCancel = c.estado === 'pendiente';
 
         lista.insertAdjacentHTML('beforeend', `
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-4">
                 <div class="card mc-card p-3 h-100">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <h6 class="fw-bold mb-0">${c.nombre_servicio}</h6>
@@ -76,7 +76,7 @@ function renderCitas(citas) {
                     </p>
                     ${puedeCancel ? `
                     <div class="mt-3 text-end">
-                        <button class="btn btn-outline-danger btn-sm"
+                        <button class="btn-cancelar"
                                 onclick="solicitarCancelar(${c.id}, '${c.nombre_servicio}', '${fecha}', '${hora}')">
                             Cancelar cita
                         </button>
@@ -104,7 +104,10 @@ async function cargarCitas() {
         }
 
         todasLasCitas = data.citas ?? [];
-        renderCitas(todasLasCitas);
+
+        const pendientes = todasLasCitas.filter(c => c.estado === 'pendiente');
+
+        renderCitas(pendientes);
 
     } catch {
         toast('Error de conexión.', 'danger');
@@ -114,9 +117,9 @@ async function cargarCitas() {
 }
 
 /* ── Filtros ─────────────────────────────────────────────── */
-document.querySelectorAll('[data-filter]').forEach(btn => {
+document.querySelectorAll('.filter-pill').forEach(btn => {
     btn.addEventListener('click', function () {
-        document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
 
         const filtro = this.dataset.filter;

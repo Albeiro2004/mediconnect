@@ -56,7 +56,7 @@ function irAPaso(n) {
 
 /* ── Botones "Atrás" delegados ───────────────────────────── */
 document.addEventListener('click', e => {
-    const btn = e.target.closest('[data-prev]');
+    const btn = e.target.closest('.btn-prev');
     if (btn) irAPaso(parseInt(btn.dataset.prev));
 });
 
@@ -80,7 +80,7 @@ async function cargarSedes() {
         (data.sedes ?? []).forEach(s => {
             lista.insertAdjacentHTML('beforeend', `
                 <div class="col-12 col-sm-6">
-                    <div class="card mc-card p-3 seleccionable" style="cursor:pointer"
+                    <div class="sel-card" style="cursor:pointer"
                          data-id="${s.id}" data-nombre="${s.nombre_sede}">
                         <div class="fw-semibold">${s.nombre_sede}</div>
                         <div class="small text-muted">${s.ciudad} · ${s.direccion}</div>
@@ -89,7 +89,7 @@ async function cargarSedes() {
             `);
         });
 
-        lista.querySelectorAll('.seleccionable').forEach(card => {
+        + lista.querySelectorAll('.sel-card').forEach(card => {
             card.addEventListener('click', () => {
                 seleccion.sede_id    = parseInt(card.dataset.id);
                 seleccion.nombre_sede = card.dataset.nombre;
@@ -114,8 +114,8 @@ async function cargarServicios() {
 
         (data.servicios ?? []).forEach(s => {
             lista.insertAdjacentHTML('beforeend', `
-                <div class="col-12 col-sm-6">
-                    <div class="card mc-card p-3 seleccionable" style="cursor:pointer"
+                <div class="col-12 col-sm-3">
+                    <div class="sel-card" style="cursor:pointer"
                          data-id="${s.id}" data-nombre="${s.nombre_servicio}">
                         <div class="fw-semibold">${s.nombre_servicio}</div>
                         <div class="small text-muted">
@@ -128,7 +128,7 @@ async function cargarServicios() {
             `);
         });
 
-        lista.querySelectorAll('.seleccionable').forEach(card => {
+        lista.querySelectorAll('.sel-card').forEach(card => {
             card.addEventListener('click', () => {
                 seleccion.servicio_id     = parseInt(card.dataset.id);
                 seleccion.nombre_servicio = card.dataset.nombre;
@@ -161,7 +161,7 @@ async function cargarMedicos() {
         medicos.forEach(m => {
             lista.insertAdjacentHTML('beforeend', `
                 <div class="col-12 col-sm-6">
-                    <div class="card mc-card p-3 seleccionable" style="cursor:pointer"
+                    <div class="sel-card" style="cursor:pointer"
                          data-id="${m.id}" data-nombre="${m.nombre_completo}">
                         <div class="fw-semibold">Dr(a). ${m.nombre_completo}</div>
                         <div class="small text-muted">${m.cargo_especialidad}</div>
@@ -173,7 +173,7 @@ async function cargarMedicos() {
             `);
         });
 
-        lista.querySelectorAll('.seleccionable').forEach(card => {
+        lista.querySelectorAll('.sel-card').forEach(card => {
             card.addEventListener('click', () => {
                 seleccion.medico_id    = parseInt(card.dataset.id);
                 seleccion.nombre_medico = card.dataset.nombre;
@@ -249,26 +249,11 @@ function construirResumen() {
     });
 
     document.getElementById('resumen-cita').innerHTML = `
-        <li class="list-group-item d-flex justify-content-between px-0">
-            <span class="text-muted small">Sede</span>
-            <span class="small fw-semibold">${seleccion.nombre_sede}</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between px-0">
-            <span class="text-muted small">Servicio</span>
-            <span class="small fw-semibold">${seleccion.nombre_servicio}</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between px-0">
-            <span class="text-muted small">Médico</span>
-            <span class="small fw-semibold">Dr(a). ${seleccion.nombre_medico}</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between px-0">
-            <span class="text-muted small">Fecha</span>
-            <span class="small fw-semibold">${fecha}</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between px-0">
-            <span class="text-muted small">Hora</span>
-            <span class="small fw-semibold">${seleccion.hora.slice(0, 5)}</span>
-        </li>
+        <div class="resumen-row"><span class="label">Sede</span><span class="valor">${seleccion.nombre_sede}</span></div>
+        <div class="resumen-row"><span class="label">Servicio</span><span class="valor">${seleccion.nombre_servicio}</span></div>
+        <div class="resumen-row"><span class="label">Médico</span><span class="valor">Dr(a). ${seleccion.nombre_medico}</span></div>
+        <div class="resumen-row"><span class="label">Fecha</span><span class="valor">${fecha}</span></div>
+        <div class="resumen-row"><span class="label">Hora</span><span class="valor">${seleccion.hora.slice(0, 5)}</span></div>
     `;
 }
 

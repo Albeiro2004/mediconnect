@@ -19,119 +19,493 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel Admin · MediConnect</title>
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/main.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS personalizado -->
     <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/admin.css">
+
+    <style>
+        :root {
+            --teal:       #0a9396;
+            --teal-dark:  #005f73;
+            --teal-light: #94d2bd;
+            --cream:      #fefae0;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .mc-sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--teal-dark), var(--teal));
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            z-index: 1040;
+            transition: transform 0.3s ease;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .mc-sidebar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem 1.25rem;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 1rem;
+        }
+
+        .mc-sidebar-brand .brand-name {
+            font-size: 1.4rem;
+            color: #fff;
+            font-weight: 500;
+        }
+        .mc-sidebar-brand .brand-name em {
+            color: var(--teal-light);
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        .mc-sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            padding: 0 0.25rem;
+        }
+
+        .mc-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            border-radius: 0.6rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .mc-nav-link:hover,
+        .mc-nav-link.active {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            transform: translateX(4px);
+        }
+
+        .mc-nav-link i {
+            font-size: 1.1rem;
+            width: 1.25rem;
+            text-align: center;
+        }
+
+        .mc-sidebar-footer {
+            padding: 1rem 0.75rem;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mc-sidebar-footer .small {
+            color: rgba(255,255,255,0.9);
+            font-weight: 500;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .mc-main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* ===== TOPBAR ===== */
+        .mc-topbar {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            border-bottom: 1px solid #e9ecef;
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 1030;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+
+        .mc-topbar .page-title {
+            font-size: 1.25rem;
+            color: var(--teal-dark);
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .role-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.35rem 0.85rem;
+            border-radius: 2rem;
+            background: linear-gradient(135deg, var(--teal-light), var(--teal));
+            color: #fff;
+            border: none;
+            box-shadow: 0 2px 8px rgba(10,147,150,0.25);
+        }
+
+        /* ===== STAT CARDS ===== */
+        .stat-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 1.25rem !important;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: #fff;
+            height: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-icon i { font-size: 1.25rem; }
+
+        .stat-value {
+            font-size: 2rem;
+            line-height: 1;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .bg-primary-soft { background: rgba(13,110,253,0.12); color: #0d6efd; }
+        .bg-warning-soft { background: rgba(255,193,7,0.15); color: #856404; }
+        .bg-success-soft { background: rgba(25,135,84,0.12); color: #0a3622; }
+        .bg-danger-soft  { background: rgba(220,53,69,0.12); color: #58151c; }
+
+        /* ===== TABLE CARD ===== */
+        .mc-table-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .mc-table-card .card-header {
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 1rem 1.5rem;
+        }
+
+        .mc-table-card .card-header h6 {
+            font-size: 1.1rem;
+            color: var(--teal-dark);
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .table thead th {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #6c757d;
+            border-bottom: 2px solid #f0f0f0;
+            padding: 0.85rem 1rem;
+            font-weight: 600;
+            background: #fafafa;
+        }
+
+        .table tbody td {
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            vertical-align: middle;
+            border-color: #f0f0f0;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(10,147,150,0.03);
+        }
+
+        /* ===== BADGES ===== */
+        .badge-pendiente  { background:#fff3cd; color:#856404; border:1px solid #ffc107; }
+        .badge-confirmada { background:#d1e7dd; color:#0a3622; border:1px solid #198754; }
+        .badge-cancelada  { background:#f8d7da; color:#58151c; border:1px solid #dc3545; }
+        .badge-finalizada { background:#e2e3e5; color:#383d41; border:1px solid #adb5bd; }
+
+        .badge-pendiente, .badge-confirmada, .badge-cancelada, .badge-finalizada {
+            border-radius: 2rem;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-cambiar {
+            font-size: 0.8rem;
+            border: 1px solid #dee2e6;
+            background: #fff;
+            color: #495057;
+            border-radius: 0.5rem;
+            padding: 0.3rem 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .btn-cambiar:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+            background: rgba(10,147,150,0.05);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-secondary {
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-content {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        .modal-header {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 1.25rem 1.5rem;
+        }
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--teal-dark);
+        }
+        .modal-body { padding: 1.25rem 1.5rem; }
+        .modal-footer {
+            border-top: 1px solid #f0f0f0;
+            padding: 1rem 1.5rem;
+            gap: 0.5rem;
+        }
+
+        /* ===== TOAST & SPINNER ===== */
+        #toast-box {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 300px;
+        }
+
+        #spinner-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+        }
+        #spinner-overlay.show { display: flex; }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-width: 0.25em;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .mc-sidebar {
+                transform: translateX(-100%);
+            }
+            .mc-sidebar.show {
+                transform: translateX(0);
+            }
+            .mc-main {
+                margin-left: 0;
+            }
+            .mc-main.sidebar-open {
+                margin-left: var(--sidebar-width);
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ── Sidebar ─────────────────────────────────────────── -->
-<div class="mc-sidebar" id="sidebar">
+<!-- Sidebar -->
+<aside class="mc-sidebar" id="sidebar" aria-label="Menú principal">
     <div class="mc-sidebar-brand">
-        <span class="text-white fw-bold fs-5"><span class="text-info">Medi</span>Connect</span>
-        <button class="btn btn-sm text-white d-md-none" id="btn-close-sidebar">✕</button>
+        <span class="brand-name"><em>Medi</em>Connect</span>
+        <button class="btn btn-sm text-white d-md-none" id="btn-close-sidebar" aria-label="Cerrar menú">
+            <i class="bi bi-x-lg"></i>
+        </button>
     </div>
-
     <nav class="mc-sidebar-nav">
         <a href="<?= htmlspecialchars($w) ?>/views/admin/dashboard.php" class="mc-nav-link active">
-            📊 <span>Dashboard</span>
+            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
         </a>
         <a href="<?= htmlspecialchars($w) ?>/views/admin/sedes.php" class="mc-nav-link">
-            🏥 <span>Sedes</span>
+            <i class="bi bi-hospital"></i> <span>Sedes</span>
         </a>
         <a href="<?= htmlspecialchars($w) ?>/views/admin/medicos.php" class="mc-nav-link">
-            👨‍⚕️ <span>Médicos</span>
+            <i class="bi bi-person-gear"></i> <span>Médicos</span>
         </a>
         <a href="<?= htmlspecialchars($w) ?>/views/admin/servicios.php" class="mc-nav-link">
-            🩺 <span>Servicios</span>
+            <i class="bi bi-heart-pulse"></i> <span>Servicios</span>
         </a>
         <a href="<?= htmlspecialchars($w) ?>/views/admin/citas.php" class="mc-nav-link">
-            📋 <span>Citas</span>
+            <i class="bi bi-calendar-check"></i> <span>Citas</span>
         </a>
     </nav>
-
     <div class="mc-sidebar-footer">
         <span class="small text-truncate"><?= htmlspecialchars($_SESSION['user_nombre']) ?></span>
-        <button class="btn btn-sm btn-outline-light ms-2" id="btn-logout">Salir</button>
+        <button class="btn btn-sm btn-outline-light ms-2 d-flex align-items-center gap-1" id="btn-logout">
+            <i class="bi bi-box-arrow-right"></i> Salir
+        </button>
     </div>
-</div>
+</aside>
 
-<!-- ── Contenido principal ────────────────────────────── -->
-<div class="mc-main" id="main-content">
+<!-- Main Content -->
+<main class="mc-main" id="main-content">
 
     <!-- Topbar -->
-    <div class="mc-topbar">
-        <button class="btn btn-sm btn-outline-secondary d-md-none" id="btn-open-sidebar">☰</button>
-        <h6 class="mb-0 fw-bold">Dashboard</h6>
-        <span class="badge bg-primary">
+    <header class="mc-topbar">
+        <button class="btn btn-sm btn-outline-secondary d-md-none" id="btn-open-sidebar" aria-label="Abrir menú">
+            <i class="bi bi-list"></i>
+        </button>
+        <h1 class="page-title mb-0">Dashboard</h1>
+        <span class="role-badge">
             <?= $_SESSION['user_rol'] === 'superadmin' ? 'Super Admin' : 'Admin Sede' ?>
         </span>
+    </header>
+
+    <!-- Toast container & Spinner -->
+    <div id="toast-box" role="region" aria-live="polite"></div>
+    <div id="spinner-overlay" aria-busy="true">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
     </div>
 
-    <!-- Toast y spinner -->
-    <div id="toast-box"></div>
-    <div id="spinner-overlay"><div class="spinner-border text-primary"></div></div>
-
+    <!-- Content -->
     <div class="p-4">
 
-        <!-- Tarjetas de resumen -->
-        <div class="row g-3 mb-4">
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-4">
             <div class="col-6 col-lg-3">
-                <div class="card mc-card p-3 stat-card">
-                    <div class="stat-icon bg-primary-soft">📋</div>
-                    <div class="stat-value" id="stat-total">—</div>
+                <div class="card stat-card">
+                    <div class="stat-icon bg-primary-soft">
+                        <i class="bi bi-calendar-check-fill"></i>
+                    </div>
+                    <div class="stat-value text-dark" id="stat-total">—</div>
                     <div class="stat-label">Total citas</div>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
-                <div class="card mc-card p-3 stat-card">
-                    <div class="stat-icon bg-warning-soft">⏳</div>
+                <div class="card stat-card">
+                    <div class="stat-icon bg-warning-soft">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
                     <div class="stat-value text-warning" id="stat-pendientes">—</div>
                     <div class="stat-label">Pendientes</div>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
-                <div class="card mc-card p-3 stat-card">
-                    <div class="stat-icon bg-success-soft">✅</div>
+                <div class="card stat-card">
+                    <div class="stat-icon bg-success-soft">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
                     <div class="stat-value text-success" id="stat-confirmadas">—</div>
                     <div class="stat-label">Confirmadas</div>
                 </div>
             </div>
             <div class="col-6 col-lg-3">
-                <div class="card mc-card p-3 stat-card">
-                    <div class="stat-icon bg-danger-soft">❌</div>
+                <div class="card stat-card">
+                    <div class="stat-icon bg-danger-soft">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </div>
                     <div class="stat-value text-danger" id="stat-canceladas">—</div>
                     <div class="stat-label">Canceladas</div>
                 </div>
             </div>
         </div>
 
-        <!-- Tabla de citas recientes -->
-        <div class="card mc-card p-3">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h6 class="fw-bold mb-0">Citas recientes</h6>
-                <a href="<?= htmlspecialchars($w) ?>/views/admin/citas.php" class="btn btn-sm btn-outline-primary">
-                    Ver todas
+        <!-- Recent Appointments Table -->
+        <div class="card mc-table-card">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h6 class="mb-0">Citas recientes</h6>
+                <a href="<?= htmlspecialchars($w) ?>/views/admin/citas.php"
+                   class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
+                    <i class="bi bi-eye"></i> Ver todas
                 </a>
             </div>
-
             <div class="table-responsive">
-                <table class="table table-hover align-middle small mb-0">
-                    <thead class="table-light">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Cliente</th>
-                        <th>Médico</th>
-                        <th>Servicio</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>Estado</th>
-                        <th></th>
+                        <th scope="col">#</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Médico</th>
+                        <th scope="col">Servicio</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Hora</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col" class="text-end">Acciones</th>
                     </tr>
                     </thead>
                     <tbody id="tabla-citas">
                     <tr>
-                        <td colspan="8" class="text-center text-muted py-4">Cargando...</td>
+                        <td colspan="8" class="text-center text-muted py-5">
+                            <div class="d-flex flex-column align-items-center gap-2">
+                                <i class="bi bi-hourglass-split fs-4"></i>
+                                <span>Cargando citas...</span>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -139,33 +513,40 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
         </div>
 
     </div>
-</div>
+</main>
 
-<!-- Modal cambiar estado -->
-<div class="modal fade" id="modal-estado" tabindex="-1">
+<!-- Modal: Change Status -->
+<div class="modal fade" id="modal-estado" tabindex="-1" aria-labelledby="modal-estado-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header border-0">
-                <h6 class="modal-title fw-bold">Cambiar estado de cita</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title" id="modal-estado-label">Cambiar estado de cita</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
                 <p class="small text-muted mb-3" id="modal-estado-info"></p>
-                <select class="form-select" id="select-estado">
-                    <option value="pendiente">Pendiente</option>
-                    <option value="confirmada">Confirmada</option>
-                    <option value="cancelada">Cancelada</option>
-                    <option value="finalizada">Finalizada</option>
+                <label for="select-estado" class="form-label small fw-medium">Nuevo estado</label>
+                <select class="form-select form-select-sm" id="select-estado">
+                    <option value="pendiente">🟡 Pendiente</option>
+                    <option value="confirmada">🟢 Confirmada</option>
+                    <option value="cancelada">🔴 Cancelada</option>
+                    <option value="finalizada">⚪ Finalizada</option>
                 </select>
             </div>
-            <div class="modal-footer border-0">
-                <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary btn-sm btn-mc" id="btn-guardar-estado">Guardar</button>
+            <div class="modal-footer border-0 pt-0">
+                <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i> Cancelar
+                </button>
+                <button class="btn btn-sm text-white" id="btn-guardar-estado"
+                        style="background:var(--teal); border-radius:0.5rem; padding:0.4rem 1.25rem;">
+                    <i class="bi bi-check-lg"></i> Guardar
+                </button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= htmlspecialchars($w) ?>/assets/js/admin-dashboard.js"></script>
 </body>

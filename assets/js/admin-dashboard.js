@@ -6,6 +6,7 @@ const API = (() => {
     if (ia > 0) return p.slice(0, ia);
     return '';
 })();
+
 let citaEditandoId = null;
 const modalEstado  = new bootstrap.Modal(document.getElementById('modal-estado'));
 
@@ -32,7 +33,7 @@ function spinner(show) {
 
 /* ── Badge estado ────────────────────────────────────────── */
 function badgeEstado(estado) {
-    return `<span class="badge badge-${estado}">${estado.charAt(0).toUpperCase() + estado.slice(1)}</span>`;
+    return `<span class="badge-${estado}">${estado.charAt(0).toUpperCase() + estado.slice(1)}</span>`;
 }
 
 /* ── Cargar citas ────────────────────────────────────────── */
@@ -82,7 +83,7 @@ async function cargarCitas() {
                     <td>${c.hora_cita.slice(0, 5)}</td>
                     <td>${badgeEstado(c.estado)}</td>
                     <td>
-                        <button class="btn btn-xs btn-outline-secondary"
+                        <button class="btn-cambiar"
                                 onclick="abrirModalEstado(${c.id}, '${c.estado}', '${c.nombre_cliente}', '${fecha}')">
                             Cambiar
                         </button>

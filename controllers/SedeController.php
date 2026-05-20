@@ -35,7 +35,7 @@ class SedeController
     // ── POST /admin/sedes  (superadmin crea sede) ─────────────
     public function store(): void
     {
-        Auth::requireRole(['superadmin']);
+        Auth::requireRole(['superadmin', 'admin_sede']);
 
         $data  = getJsonBody();
         $error = validateRequired($data, ['nombre_sede', 'direccion', 'ciudad']);
@@ -60,7 +60,7 @@ class SedeController
     // ── PUT /admin/sedes/{id}  (superadmin actualiza sede) ────
     public function update(int $id): void
     {
-        Auth::requireRole(['superadmin']);
+        Auth::requireRole(['superadmin', 'admin_sede']);
 
         $sede = $this->model->findById($id);
         if (!$sede) jsonResponse(404, ['error' => 'Sede no encontrada']);
@@ -87,7 +87,7 @@ class SedeController
     // ── PATCH /admin/sedes/{id}/estado ────────────────────────
     public function cambiarEstado(int $id): void
     {
-        Auth::requireRole(['superadmin']);
+        Auth::requireRole(['superadmin', 'admin_sede']);
 
         $data  = getJsonBody();
         $error = validateRequired($data, ['estado']);
@@ -105,7 +105,7 @@ class SedeController
     // ── DELETE /admin/sedes/{id} ──────────────────────────────
     public function destroy(int $id): void
     {
-        Auth::requireRole(['superadmin']);
+        Auth::requireRole(['superadmin', 'admin_sede']);
 
         try {
             $this->model->delete($id)
