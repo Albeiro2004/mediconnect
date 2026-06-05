@@ -380,11 +380,11 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
         <a href="<?= htmlspecialchars($w) ?>/views/prestador/dashboard.php" class="mc-nav-link">
             <i class="bi bi-speedometer2"></i> <span>Mi agenda</span>
         </a>
+        <a href="<?= htmlspecialchars($w) ?>/views/prestador/logs.php" class="mc-nav-link">
+            <i class="bi bi-journal-text"></i> <span>Logs de atención</span>
+        </a>
         <a href="<?= htmlspecialchars($w) ?>/views/prestador/disponibilidad.php" class="mc-nav-link">
             <i class="bi bi-calendar-week"></i> <span>Disponibilidad</span>
-        </a>
-        <a href="<?= htmlspecialchars($w) ?>/views/prestador/logs.php" class="mc-nav-link active">
-            <i class="bi bi-journal-text"></i> <span>Logs de atención</span>
         </a>
     </nav>
     <div class="mc-sidebar-footer">

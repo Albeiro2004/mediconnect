@@ -81,11 +81,11 @@ async function cargarServicios() {
                                 onclick="abrirEditar(${s.id}, '${s.nombre_servicio.replace(/'/g,"\\'")}',
                                 '${(s.descripcion ?? '').replace(/'/g,"\\'")}',
                                 ${s.precio}, ${s.duracion_minutos})">
-                            Editar
+                           <i class="bi bi-pencil-square"></i> Editar
                         </button>
                         <button class="btn btn-xs btn-outline-danger"
                                 onclick="abrirEliminar(${s.id}, '${s.nombre_servicio.replace(/'/g,"\\'")}')">
-                            Eliminar
+                           <i class="bi bi-trash3-fill"></i>
                         </button>
                     </td>
                 </tr>

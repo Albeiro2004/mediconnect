@@ -81,11 +81,11 @@ async function cargarSedes() {
                         <button class="btn btn-xs btn-outline-primary me-1"
                                 onclick="abrirEditar(${s.id}, '${s.nombre_sede}', '${s.ciudad}',
                                 '${s.direccion}', '${s.telefono_contacto ?? ''}', '${s.estado}')">
-                            Editar
+                           <i class="bi bi-pencil-square"></i> Editar
                         </button>
                         <button class="btn btn-xs btn-outline-danger"
                                 onclick="abrirEliminar(${s.id}, '${s.nombre_sede}')">
-                            Eliminar
+                           <i class="bi bi-trash3-fill"></i>
                         </button>
                     </td>
                 </tr>

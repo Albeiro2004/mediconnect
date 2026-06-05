@@ -85,7 +85,7 @@ async function cargarCitas() {
                     <td>
                         <button class="btn-cambiar"
                                 onclick="abrirModalEstado(${c.id}, '${c.estado}', '${c.nombre_cliente}', '${fecha}')">
-                            Cambiar
+                           <i class="bi bi-pencil-square"></i> Cambiar
                         </button>
                     </td>
                 </tr>

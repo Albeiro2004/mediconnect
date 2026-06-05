@@ -144,7 +144,7 @@ async function cargarLogs() {
                             '${(l.observaciones_finales ?? '').replace(/'/g, "\\'")}',
                             '${(l.tratamiento_o_resultado ?? '').replace(/'/g, "\\'")}',
                             '${l.proxima_cita_sugerida ?? ''}')">
-                        Editar
+                        <i class="bi bi-pencil-square"></i>
                     </button>
                 </td>
             </tr>

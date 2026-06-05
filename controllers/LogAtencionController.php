@@ -111,7 +111,7 @@ class LogAtencionController
 
             // Verificar que la cita pertenezca a este médico
             $stmt = Database::getInstance()->prepare(
-                'SELECT medico_id FROM reservas_enterprise_citas WHERE id = ? LIMIT 1'
+                'SELECT medico_id FROM citas WHERE id = ? LIMIT 1'
             );
             $stmt->execute([$log['cita_id']]);
             $cita = $stmt->fetch();

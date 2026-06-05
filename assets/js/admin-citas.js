@@ -66,7 +66,7 @@ function renderCitas(citas) {
                     <button class="btn btn-xs btn-outline-secondary"
                             onclick="abrirModalEstado(${c.id}, '${c.estado}',
                             '${c.nombre_cliente}', '${fecha}')">
-                        Cambiar
+                      <i class="bi bi-arrow-repeat"></i>  Cambiar
                     </button>
                 </td>
             </tr>

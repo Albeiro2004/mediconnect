@@ -98,11 +98,11 @@ async function cargarMedicos(sedeId = '') {
                         <button class="btn btn-xs btn-outline-primary me-1"
                                 onclick="abrirEditar(${m.id}, ${m.sede_id}, '${m.cargo_especialidad}',
                                 '${(m.perfil_profesional ?? '').replace(/'/g, "\\'")}')">
-                            Editar
+                           <i class="bi bi-pencil-square"></i> Editar
                         </button>
                         <button class="btn btn-xs btn-outline-danger"
                                 onclick="abrirEliminar(${m.id}, '${m.nombre_completo}')">
-                            Eliminar
+                           <i class="bi bi-trash3-fill"></i>
                         </button>
                     </td>
                 </tr>

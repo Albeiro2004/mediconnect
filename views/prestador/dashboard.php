@@ -19,19 +19,12 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mi Panel · MediConnect</title>
-
-    <!-- Google Fonts: DM Sans (global) + Instrument Serif (solo marca) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-
-    <!-- Bootstrap Icons v1.11.3 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <!-- CSS personalizado -->
     <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/main.css">
     <link rel="stylesheet" href="<?= htmlspecialchars($w) ?>/assets/css/admin.css">
 
@@ -434,11 +427,11 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
         <a href="<?= htmlspecialchars($w) ?>/views/prestador/dashboard.php" class="mc-nav-link active">
             <i class="bi bi-speedometer2"></i> <span>Mi agenda</span>
         </a>
-        <a href="<?= htmlspecialchars($w) ?>/views/prestador/disponibilidad.php" class="mc-nav-link">
-            <i class="bi bi-calendar-week"></i> <span>Disponibilidad</span>
-        </a>
         <a href="<?= htmlspecialchars($w) ?>/views/prestador/logs.php" class="mc-nav-link">
             <i class="bi bi-journal-text"></i> <span>Logs de atención</span>
+        </a>
+        <a href="<?= htmlspecialchars($w) ?>/views/prestador/disponibilidad.php" class="mc-nav-link">
+            <i class="bi bi-calendar-week"></i> <span>Disponibilidad</span>
         </a>
     </nav>
     <div class="mc-sidebar-footer">
@@ -459,7 +452,7 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
         </button>
         <h6 class="mb-0">Mi agenda</h6>
         <span class="badge badge-prestador">
-            <i class="bi bi-person-check"></i> Prestador
+            <i class="bi bi-person-check"></i> Médico
         </span>
     </header>
 
@@ -534,13 +527,13 @@ header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">Ref.</th>
                         <th scope="col">Cliente</th>
                         <th scope="col">Servicio</th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Hora</th>
                         <th scope="col">Estado</th>
-                        <th scope="col" class="text-end">Acciones</th>
+                        <th scope="col" class="text-end"></th>
                     </tr>
                     </thead>
                     <tbody id="tabla-citas">
